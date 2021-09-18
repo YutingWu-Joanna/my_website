@@ -81,8 +81,8 @@ params:
   tiles:
     enable: yes
     showcase:
-      - image: joanna.jpg #换照片 到themes\forty、static、xxx ppt
-        subtitle: For Joanna
+      - image: lbssoc.jpg #换照片 到themes\forty、static、xxx ppt
+        subtitle: A Coffee lover
         title: About me
         url: blogs/yutingwu #blog里面修改 slug
       - image: pic02.jpg
