@@ -84,10 +84,10 @@ params:
         subtitle: A Coffee lover
         title: About me
         url: blogs/yutingwu #blog里面修改 slug
-      - image: pic02.jpg
-        subtitle: Feugiat Amet Tempus
-        title: Tempus
-        url: blogs/tempus
+      - image: work.jpg
+        subtitle: Details about my previous internships
+        title: My resume
+        url: blogs/forwork
       - image: pic03.jpg
         subtitle: Lorem Etiam Nullam
         title: Magna
