@@ -87,7 +87,7 @@ params:
       - image: work.jpg
         subtitle: Details about my previous internships
         title: My resume
-        url: blogs/forwork
+        url: blogs/My resume
       - image: pic03.jpg
         subtitle: Lorem Etiam Nullam
         title: Magna
