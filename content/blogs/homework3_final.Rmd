@@ -170,11 +170,11 @@ wide_format_gdp %>%
 ```
 The self-calculated GDP is generally higher compared to the GDP provided in the dataframe by a few percentage points. However, there are also a few years in which the calculated GDP is lower than the provided GDP. Consequently, we can see that there is some deviation between self-calculated GDPs and provided GDPs.  
     
-![GDP](D:/r_excluded/my_website/images/gdp2.png)   
-
 In the chart above, we can see the percentage of GDP which is spent on each of the four main GDP components, across Germany, India and the US. It is evident that for all three countries the biggest component is that of 'Household expenditure' with about 60% of GDP comprising of it. For India, Household expenditure proportion has significantly decreased over time from about 70% to 55% today. This does not necessarily mean India's Household expenditure is decreasing in absolute value. In turn, there has been a large increase in 'Gross capital formation' from 20% to about 35%. As India is an emerging economy, this is telling us that India has increased investment in capital good unproportionally over the years. The more capital a country possesses the more potential it has to grow in the long term.   
   
 The distribution across GDP components for Germany and the US is similar. This is no surprise since both countries are more developed than India. One major difference across these two countries is the fact that the US has been experiencing a slight increase in the percentage of GDP in household spending of about 5% and has a trade deficit over the years that is as low as 5%. Whereas for Germany where Household spending seems to slightly decrease, net exports have increased from having a trade deficit a few decades ago to a surplus of about 8%.
 
 Generally, for developed countries in the long term, the proportions of all four components of GDP should see less variability than the proportions for emerging countries. This is exactly what is shown by the comparison between developed countries (Germany, US) and emerging economy (India). 
+
+![GDP chart](D:/r_excluded/my_website/images/gdp2.png)   
 
