@@ -1,0 +1,256 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:26:13-05:00"
+description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna
+  sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa
+  sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem
+  consequat tincidunt. Vivamus et sagittis tempus.
+draft: false
+image: company.jpg
+keywords: ""
+slug: preprogramme
+title: Pre-programme Assignment
+---
+
+
+```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(gapminder)  # gapminder dataset
+library(here)
+library(janitor)
+```
+
+# Task 2: `gapminder` country comparison
+
+```{r}
+glimpse(gapminder)
+
+head(gapminder, 20) 
+
+```
+
+```{r}
+country_data <- gapminder %>% 
+            filter(country == "China") 
+
+continent_data <- gapminder %>% 
+            filter(continent == "Asia")
+```
+
+```{r, lifeExp_one_country}
+plot1 <- ggplot(data = country_data, mapping = aes(x = year, y = lifeExp))+
+   geom_point() +
+   geom_smooth(se = FALSE)+
+   NULL 
+
+plot1
+```
+
+```{r, lifeExp_one_country_with_label}
+plot1<- plot1 +
+  labs(title = "How life expectancy has changed over the years for China ",
+      x = "Year ",
+      y = "Life Expectancy ") +
+  NULL
+
+
+plot1
+```
+
+```{r lifeExp_one_continent}
+ggplot(data = continent_data, mapping = aes(x = year , y = lifeExp , colour= country, group = country))+
+  geom_point() + 
+  geom_smooth(se = FALSE) +
+  NULL
+```
+
+```{r lifeExp_facet_by_continent}
+ggplot(data = gapminder , mapping = aes(x = year , y = lifeExp , colour= continent))+
+  geom_point() + 
+  geom_smooth(se = FALSE) +
+  facet_wrap(~continent) +
+  theme(legend.position="none") +
+  NULL
+```
+
+> Type your answer after this blockquote.
+- All continents show increasing trends in life expectancy, with Africa showing the slowest increase and Asiz showing the fastest increase.
+- Life expectancy growth slows in Asia and Africa.
+- Overall, Life expectancy is highest in Europe and lowest in Africa.
+
+# Task 3: Brexit vote analysis
+
+```{r load_brexit_data, warning=FALSE, message=FALSE}
+brexit_results <- read_csv(here::here("data","brexit_results.csv"))
+
+
+glimpse(brexit_results)
+```
+
+```{r brexit_histogram, warning=FALSE, message=FALSE}
+
+# histogram
+ggplot(brexit_results, aes(x = leave_share)) +
+  geom_histogram(binwidth = 2.5)
+
+
+# density plot-- think smoothed histogram
+ggplot(brexit_results, aes(x = leave_share)) +
+  geom_density()
+
+
+# The empirical cumulative distribution function (ECDF) 
+ggplot(brexit_results, aes(x = leave_share)) +
+  stat_ecdf(geom = "step", pad = FALSE) +
+  scale_y_continuous(labels = scales::percent)
+  
+
+
+```
+
+```{r brexit_immigration_correlation}
+brexit_results %>% 
+  select(leave_share, born_in_uk) %>% 
+  cor()
+```
+
+```{r brexit_immigration_plot}
+ggplot(brexit_results, aes(x = born_in_uk, y = leave_share)) +
+  geom_point(alpha=0.3) +
+  
+  # add a smoothing line, and use method="lm" to get the best straight-line
+  geom_smooth(method = "lm") + 
+  
+  # use a white background and frame the plot with a black box
+  theme_bw() +
+  NULL
+```
+
+> Type your answer after, and outside, this blockquote.
+- Slightly more than half of the Constituencies support Britain leaving the EU.
+- Higher rates of being born in the UK are more likely to support Brexit.
+- The higher the rate of birth in the UK, the smaller the range of the percent of supporting for Brexit
+
+
+# Task 4: Animal rescue incidents attended by the London Fire Brigade
+
+```{r load_animal_rescue_data, warning=FALSE, message=FALSE}
+
+url <- "https://data.london.gov.uk/download/animal-rescue-incidents-attended-by-lfb/8a7d91c2-9aec-4bde-937a-3998f4717cd8/Animal%20Rescue%20incidents%20attended%20by%20LFB%20from%20Jan%202009.csv"
+
+animal_rescue <- read_csv(url,
+                          locale = locale(encoding = "CP1252")) %>% 
+  janitor::clean_names()
+
+
+glimpse(animal_rescue)
+```
+
+
+```{r, instances_by_calendar_year}
+
+animal_rescue %>% 
+  dplyr::group_by(cal_year) %>% 
+  summarise(count=n())
+
+animal_rescue %>% 
+  count(cal_year, name="count")
+
+```
+
+
+```{r, animal_group_percentages}
+animal_rescue %>% 
+  group_by(animal_group_parent) %>% 
+  
+  #group_by and summarise will produce a new column with the count in each animal group
+  summarise(count = n()) %>% 
+  
+  # mutate adds a new column; here we calculate the percentage
+  mutate(percent = round(100*count/sum(count),2)) %>% 
+  
+  # arrange() sorts the data by percent. Since the default sorting is min to max and we would like to see it sorted
+  # in descending order (max to min), we use arrange(desc()) 
+  arrange(desc(percent))
+
+
+animal_rescue %>% 
+  
+  #count does the same thing as group_by and summarise
+  # name = "count" will call the column with the counts "count" ( exciting, I know)
+  # and 'sort=TRUE' will sort them from max to min
+  count(animal_group_parent, name="count", sort=TRUE) %>% 
+  mutate(percent = round(100*count/sum(count),2))
+
+
+```
+
+
+```{r, parse_incident_cost,message=FALSE, warning=FALSE}
+
+# what type is variable incident_notional_cost from dataframe `animal_rescue`
+typeof(animal_rescue$incident_notional_cost)
+
+# readr::parse_number() will convert any numerical values stored as characters into numbers
+animal_rescue <- animal_rescue %>% 
+
+  # we use mutate() to use the parse_number() function and overwrite the same variable
+  mutate(incident_notional_cost = parse_number(incident_notional_cost))
+
+# incident_notional_cost from dataframe `animal_rescue` is now 'double' or numeric
+typeof(animal_rescue$incident_notional_cost)
+
+```
+
+
+```{r, stats_on_incident_cost,message=FALSE, warning=FALSE}
+
+animal_rescue %>% 
+  
+  # group by animal_group_parent
+  group_by(animal_group_parent) %>% 
+  
+  # filter resulting data, so each group has at least 6 observations
+  filter(n()>6) %>% 
+  
+  # summarise() will collapse all values into 3 values: the mean, median, and count  
+  # we use na.rm=TRUE to make sure we remove any NAs, or cases where we do not have the incident cos
+  summarise(mean_incident_cost = mean (incident_notional_cost, na.rm=TRUE),
+            median_incident_cost = median (incident_notional_cost, na.rm=TRUE),
+            sd_incident_cost = sd (incident_notional_cost, na.rm=TRUE),
+            min_incident_cost = min (incident_notional_cost, na.rm=TRUE),
+            max_incident_cost = max (incident_notional_cost, na.rm=TRUE),
+            count = n()) %>% 
+  
+  # sort the resulting data in descending order. You choose whether to sort by count or mean cost.
+  arrange(desc(count))
+
+```
+
+
+```{r, plots_on_incident_cost_by_animal_group,message=FALSE, warning=FALSE}
+
+# base_plot
+base_plot <- animal_rescue %>% 
+  group_by(animal_group_parent) %>% 
+  filter(n()>6) %>% 
+  ggplot(aes(x=incident_notional_cost))+
+  facet_wrap(~animal_group_parent, scales = "free")+
+  theme_bw()
+
+base_plot + geom_histogram()
+base_plot + geom_density()
+base_plot + geom_boxplot()
+base_plot + stat_ecdf(geom = "step", pad = FALSE) +
+  scale_y_continuous(labels = scales::percent)
+
+
+
+```
+
+
+- The third one (boxplot) communicates the variability of the `incident_notional_cost` values best.
+- Horse and Cow are more expensive.
+

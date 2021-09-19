@@ -98,12 +98,12 @@ params:
         url: blogs/bike
       - image: conference.jpg
         subtitle: IBM HR Analytics Employee Attrition & Performance
-        title: IBM HR Analytics
+        title: Project3-IBM HR Analytics
         url: blogs/ibm
-      - image: pic06.jpg
-        subtitle: Feugiat Amet Tempus
-        title: Etiam
-        url: blogs/ipsum
+      - image: vote.jpg
+        subtitle: Applied Statistics Pre-programme assignment
+        title: Pre-programme assignment
+        url: blogs/preprogramme
   two:
     buttonText: Get Started
     enable: yes
