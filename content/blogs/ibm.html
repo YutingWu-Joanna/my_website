@@ -1,0 +1,352 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:26:13-05:00"
+description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna
+  sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa
+  sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem
+  consequat tincidunt. Vivamus et sagittis tempus.
+draft: false
+image: company.jpg
+keywords: ""
+slug: ibm
+title: IBM HR Analytics
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>For this task, you will analyse a data set on Human Resource Analytics. The <a href="https://www.kaggle.com/pavansubhasht/ibm-hr-analytics-attrition-dataset">IBM HR Analytics Employee Attrition &amp; Performance data set</a> is a fictional data set created by IBM data scientists. Among other things, the data set includes employees’ income, their distance from work, their position in the company, their level of education, etc. A full description can be found on the website.</p>
+<p>First let us load the data</p>
+<pre class="r"><code>hr_dataset &lt;- read_csv(file = (&quot;D:/r_excluded/my_website/data/datasets_1067_1925_WA_Fn-UseC_-HR-Employee-Attrition.csv&quot;))
+glimpse(hr_dataset)</code></pre>
+<pre><code>## Rows: 1,470
+## Columns: 35
+## $ Age                      &lt;dbl&gt; 41, 49, 37, 33, 27, 32, 59, 30, 38, 36, 35, 2~
+## $ Attrition                &lt;chr&gt; &quot;Yes&quot;, &quot;No&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;~
+## $ BusinessTravel           &lt;chr&gt; &quot;Travel_Rarely&quot;, &quot;Travel_Frequently&quot;, &quot;Travel~
+## $ DailyRate                &lt;dbl&gt; 1102, 279, 1373, 1392, 591, 1005, 1324, 1358,~
+## $ Department               &lt;chr&gt; &quot;Sales&quot;, &quot;Research &amp; Development&quot;, &quot;Research ~
+## $ DistanceFromHome         &lt;dbl&gt; 1, 8, 2, 3, 2, 2, 3, 24, 23, 27, 16, 15, 26, ~
+## $ Education                &lt;dbl&gt; 2, 1, 2, 4, 1, 2, 3, 1, 3, 3, 3, 2, 1, 2, 3, ~
+## $ EducationField           &lt;chr&gt; &quot;Life Sciences&quot;, &quot;Life Sciences&quot;, &quot;Other&quot;, &quot;L~
+## $ EmployeeCount            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ~
+## $ EmployeeNumber           &lt;dbl&gt; 1, 2, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16,~
+## $ EnvironmentSatisfaction  &lt;dbl&gt; 2, 3, 4, 4, 1, 4, 3, 4, 4, 3, 1, 4, 1, 2, 3, ~
+## $ Gender                   &lt;chr&gt; &quot;Female&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Female&quot;, &quot;Male&quot;, &quot;~
+## $ HourlyRate               &lt;dbl&gt; 94, 61, 92, 56, 40, 79, 81, 67, 44, 94, 84, 4~
+## $ JobInvolvement           &lt;dbl&gt; 3, 2, 2, 3, 3, 3, 4, 3, 2, 3, 4, 2, 3, 3, 2, ~
+## $ JobLevel                 &lt;dbl&gt; 2, 2, 1, 1, 1, 1, 1, 1, 3, 2, 1, 2, 1, 1, 1, ~
+## $ JobRole                  &lt;chr&gt; &quot;Sales Executive&quot;, &quot;Research Scientist&quot;, &quot;Lab~
+## $ JobSatisfaction          &lt;dbl&gt; 4, 2, 3, 3, 2, 4, 1, 3, 3, 3, 2, 3, 3, 4, 3, ~
+## $ MaritalStatus            &lt;chr&gt; &quot;Single&quot;, &quot;Married&quot;, &quot;Single&quot;, &quot;Married&quot;, &quot;Ma~
+## $ MonthlyIncome            &lt;dbl&gt; 5993, 5130, 2090, 2909, 3468, 3068, 2670, 269~
+## $ MonthlyRate              &lt;dbl&gt; 19479, 24907, 2396, 23159, 16632, 11864, 9964~
+## $ NumCompaniesWorked       &lt;dbl&gt; 8, 1, 6, 1, 9, 0, 4, 1, 0, 6, 0, 0, 1, 0, 5, ~
+## $ Over18                   &lt;chr&gt; &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, ~
+## $ OverTime                 &lt;chr&gt; &quot;Yes&quot;, &quot;No&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;No&quot;, &quot;Yes&quot;,~
+## $ PercentSalaryHike        &lt;dbl&gt; 11, 23, 15, 11, 12, 13, 20, 22, 21, 13, 13, 1~
+## $ PerformanceRating        &lt;dbl&gt; 3, 4, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, 3, ~
+## $ RelationshipSatisfaction &lt;dbl&gt; 1, 4, 2, 3, 4, 3, 1, 2, 2, 2, 3, 4, 4, 3, 2, ~
+## $ StandardHours            &lt;dbl&gt; 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 8~
+## $ StockOptionLevel         &lt;dbl&gt; 0, 1, 0, 0, 1, 0, 3, 1, 0, 2, 1, 0, 1, 1, 0, ~
+## $ TotalWorkingYears        &lt;dbl&gt; 8, 10, 7, 8, 6, 8, 12, 1, 10, 17, 6, 10, 5, 3~
+## $ TrainingTimesLastYear    &lt;dbl&gt; 0, 3, 3, 3, 3, 2, 3, 2, 2, 3, 5, 3, 1, 2, 4, ~
+## $ WorkLifeBalance          &lt;dbl&gt; 1, 3, 3, 3, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3, ~
+## $ YearsAtCompany           &lt;dbl&gt; 6, 10, 0, 8, 2, 7, 1, 1, 9, 7, 5, 9, 5, 2, 4,~
+## $ YearsInCurrentRole       &lt;dbl&gt; 4, 7, 0, 7, 2, 7, 0, 0, 7, 7, 4, 5, 2, 2, 2, ~
+## $ YearsSinceLastPromotion  &lt;dbl&gt; 0, 1, 0, 3, 2, 3, 0, 0, 1, 7, 0, 0, 4, 1, 0, ~
+## $ YearsWithCurrManager     &lt;dbl&gt; 5, 7, 0, 0, 2, 6, 0, 0, 8, 7, 3, 8, 3, 2, 3, ~</code></pre>
+<p>I am going to clean the data set, as variable names are in capital letters, some variables are not really necessary, and some variables, e.g., <code>education</code> are given as a number rather than a more useful description</p>
+<pre class="r"><code>hr_cleaned &lt;- hr_dataset %&gt;% 
+  clean_names() %&gt;% 
+  mutate(
+    education = case_when(
+      education == 1 ~ &quot;Below College&quot;,
+      education == 2 ~ &quot;College&quot;,
+      education == 3 ~ &quot;Bachelor&quot;,
+      education == 4 ~ &quot;Master&quot;,
+      education == 5 ~ &quot;Doctor&quot;
+    ),
+    environment_satisfaction = case_when(
+      environment_satisfaction == 1 ~ &quot;Low&quot;,
+      environment_satisfaction == 2 ~ &quot;Medium&quot;,
+      environment_satisfaction == 3 ~ &quot;High&quot;,
+      environment_satisfaction == 4 ~ &quot;Very High&quot;
+    ),
+    job_satisfaction = case_when(
+      job_satisfaction == 1 ~ &quot;Low&quot;,
+      job_satisfaction == 2 ~ &quot;Medium&quot;,
+      job_satisfaction == 3 ~ &quot;High&quot;,
+      job_satisfaction == 4 ~ &quot;Very High&quot;
+    ),
+    performance_rating = case_when(
+      performance_rating == 1 ~ &quot;Low&quot;,
+      performance_rating == 2 ~ &quot;Good&quot;,
+      performance_rating == 3 ~ &quot;Excellent&quot;,
+      performance_rating == 4 ~ &quot;Outstanding&quot;
+    ),
+    work_life_balance = case_when(
+      work_life_balance == 1 ~ &quot;Bad&quot;,
+      work_life_balance == 2 ~ &quot;Good&quot;,
+      work_life_balance == 3 ~ &quot;Better&quot;,
+      work_life_balance == 4 ~ &quot;Best&quot;
+    )
+  ) %&gt;% 
+  select(age, attrition, daily_rate, department,
+         distance_from_home, education,
+         gender, job_role,environment_satisfaction,
+         job_satisfaction, marital_status,
+         monthly_income, num_companies_worked, percent_salary_hike,
+         performance_rating, total_working_years,
+         work_life_balance, years_at_company,
+         years_since_last_promotion)</code></pre>
+<p>Produce a one-page summary describing this data set. Here is a non-exhaustive list of questions:</p>
+<p>The IBM Human Resources data provides a lot of information on IBM employees such as personal details, incomes and satisfaction. By drawing out different tables, graphs and using summary statistics based on the data we can arrive at valuable insights.</p>
+<p>Firstly, we begin by looking at attrition rates in IBM. In Table 1 we can see that the company has an attrition rate of 16.1%. This means that 16.1 percent of the company’s listed employees left the company at the time the data set was created, which is not that high considering many young people may be using IBM as an opportunity to learn and then move into more senior positions at different companies. This can further be seen by drawing out a box plot comparing ‘attrition’ and the total number of years worked (Figure 1). From the box plots it is evident that it’s the people with less years of work that tend to leave the company. This however is only a hypothesis and needs some further analysis in order to be concluded with certainty.</p>
+<p>Looking more closely at the distributions of some of the variables we can compare the mean and median in combination with 1st and 3rd quadrant, to make some inferences about normality and skewness. When the mean and median differ too much, there is a skewness and the distribution of the given variable is not normal. For example, age seems to be fairly normally distributed, even though the 1st and 3rd quadrant are not equally far away from the mean. Years at the company, years since last promotion and monthly income have some extreme outliers and differing median and mean making normality improbable. To confirm this, we plot density plots for each variable. It is clear that the variable that is closest to a normal distribution is ‘Age’ with the other three variables being heavily right skewed. From this, we can infer that employees across all ages can be found within IBM. At the same time there are extremely highly paid employees skewing the monthly income distribution and it is also evident that most employees are in the company for 0-10 years with only a few staying for longer periods of time. </p>
+<p>An important area to explore is that of job satisfaction and work life balance in IBM. We can conclude that the majority of IBM employees seem to be happy with their job as from tables 3 and 4 we see that about 61.3% of employees report to have a Very High/High job satisfaction and a surprising 94.6% have at least a ‘Good’ work life balance. Only very few (5.4%) report a bad work life balance, however, 20% of employees are not satisfied with their job. This may be due to a number of different reasons such as income levels or hours worked, but it is always expected that some people will not be happy at their work and thus this percentage is not of major concern.</p>
+<p>Next, we investigate how income levels compare to education. The box plots (figure 6) and histograms for education with monthly income (figure 10) indicate that more educated people tend to receive higher salaries. There are some outliers in all categories, except the ‘Doctor’ category. This indicates that we can find people from all academic backgrounds in senior, highly paid positions. Moreover, the distributions seem to be mostly skewed for the majority of education levels especially for employees with a Bachelors degree. Furthermore, plotting a bar chart (figure 9) of average incomes with education the conclusion that more educated people receive higher incomes is further supported. It is worth noting, however, that there is a big increase in average income for employees holding a ‘Doctorate’ where as for the rest of the education levels the increase in incomes is more gradual as education increases.</p>
+<p>When looking at the box plots for monthly income with gender, (figure 7) interestingly enough, it seems that incomes are distributed quite similarly across genders with similar spread of values and medians of approximately 5000 dollars. This means that there is no gender income gap in IBM. Female employees even have a higher 25th and 75th percentile and slightly higher median, implying they receive slightly higher salaries.This is a very positive find as it shows that modern companies like IBM are promoting gender equality. </p>
+<p>It is clear that income levels vary greatly between Job roles. From the box plots in figure 8 we can see that the highest paid positions are the ‘Managers’ and ‘Research Directors’ with respective medians of about 17 500 and 16 000 dollars. The spread of incomes for these two roles appear much higher than the rest. The job with the lowest pay is that of a ‘Sales Representative’ with income levels being very tightly spread around 2000-3000 dollars.</p>
+<p>Lastly, we wanted to investigate how income varies with age across different job roles. From the plots in figure 11, we can see that for many jobs employees seem to be getting similar incomes across all ages with slight increases as people get older for some positions. For positions such as Healthcare representatives and Research Directors this phenomenon is more evident. This is quite interesting as usually we expect that older people are associated with more experience and thus higher pay but this is not the case for all positions here. We should note however that for the highest paid jobs of ‘Manager’ and ‘Research Director’ there are no 20-30 year olds employed so in general it is older people that work in the highest paid positions.</p>
+<ol style="list-style-type: decimal">
+<li>How often do people leave the company (<code>attrition</code>)</li>
+</ol>
+<p><strong>Table 1</strong></p>
+<pre class="r"><code>hr_attrition_summarized &lt;- hr_cleaned %&gt;%
+  count(attrition)
+
+hr_attrition_summarized$percentage &lt;- hr_attrition_summarized$n/sum(hr_attrition_summarized$n)
+
+hr_attrition_summarized</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   attrition     n percentage
+##   &lt;chr&gt;     &lt;int&gt;      &lt;dbl&gt;
+## 1 No         1233      0.839
+## 2 Yes         237      0.161</code></pre>
+<pre class="r"><code>ggplot(hr_cleaned,aes(x=attrition,y=total_working_years))+
+                        geom_boxplot()+
+  labs(
+    title=&quot;Box plot for attrition and years worked&quot;,
+    subtitle= &quot;Figure 1&quot;,
+    x=&quot;Attrition&quot;,
+    y=&quot;Total years worked&quot;
+  )</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/attrition%20vs.%20years%20worked-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>         NULL</code></pre>
+<pre><code>## NULL</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>How are <code>age</code>, <code>years_at_company</code>, <code>monthly_income</code> and <code>years_since_last_promotion</code> distributed? can you roughly guess which of these variables is closer to Normal just by looking at summary statistics?</li>
+</ol>
+<p><strong>Table 2</strong></p>
+<pre class="r"><code>hr_cleaned %&gt;%
+  select(c(&quot;age&quot;, &quot;years_at_company&quot;, &quot;monthly_income&quot;, 
+           &quot;years_since_last_promotion&quot;))%&gt;%
+  summary()</code></pre>
+<pre><code>##       age       years_at_company monthly_income  years_since_last_promotion
+##  Min.   :18.0   Min.   : 0       Min.   : 1009   Min.   : 0.00             
+##  1st Qu.:30.0   1st Qu.: 3       1st Qu.: 2911   1st Qu.: 0.00             
+##  Median :36.0   Median : 5       Median : 4919   Median : 1.00             
+##  Mean   :36.9   Mean   : 7       Mean   : 6503   Mean   : 2.19             
+##  3rd Qu.:43.0   3rd Qu.: 9       3rd Qu.: 8379   3rd Qu.: 3.00             
+##  Max.   :60.0   Max.   :40       Max.   :19999   Max.   :15.00</code></pre>
+<pre class="r"><code>hr_cleaned %&gt;%
+  ggplot(aes(x=age))+
+  geom_density()+
+  theme_bw()+
+  labs(
+    title=&quot;Density Plot for Age&quot;,
+    subtitle= &quot;Figure 2&quot;,
+    x=&quot;Age&quot;,
+    y=&quot;Density&quot;
+  )+
+  NULL</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/Distribution%20of%20IBM%20variables-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hr_cleaned %&gt;%
+  ggplot(aes(x=years_at_company))+
+  geom_density()+
+  theme_bw()+
+  labs(
+    title=&quot;Density Plot for Years at the company&quot;,
+    subtitle= &quot;Figure 3&quot;,
+    x=&quot;Years at the company&quot;,
+    y=&quot;Density&quot;
+  )+
+  NULL</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/Distribution%20of%20IBM%20variables-2.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hr_cleaned %&gt;%
+  ggplot(aes(x=monthly_income))+
+  geom_density()+
+  theme_bw()+
+  labs(
+    title=&quot;Density Plot for Monthly income&quot;,
+    subtitle= &quot;Figure 4&quot;,
+    x=&quot;Monthly Income&quot;,
+    y=&quot;Density&quot;
+  )+
+  NULL</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/Distribution%20of%20IBM%20variables-3.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hr_cleaned %&gt;%
+  ggplot(aes(x=years_since_last_promotion))+
+  geom_density()+
+  theme_bw()+
+  labs(
+    title=&quot;Density Plot for Years since last promotion&quot;,
+    subtitle= &quot;Figure 5&quot;,
+    x=&quot;Years since last promotion&quot;,
+    y=&quot;Density&quot;
+  )+
+  NULL</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/Distribution%20of%20IBM%20variables-4.png" width="648" style="display: block; margin: auto;" /></p>
+<ol start="3" style="list-style-type: decimal">
+<li>How are <code>job_satisfaction</code> and <code>work_life_balance</code> distributed? Don’t just report counts, but express categories as % of total</li>
+</ol>
+<p><strong>Table 3</strong></p>
+<pre class="r"><code>hr_jobsatisfaction &lt;- hr_cleaned %&gt;%
+  count(job_satisfaction)
+hr_jobsatisfaction$percentage &lt;- (hr_jobsatisfaction$n/sum(hr_jobsatisfaction$n)*100)
+hr_jobsatisfaction</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   job_satisfaction     n percentage
+##   &lt;chr&gt;            &lt;int&gt;      &lt;dbl&gt;
+## 1 High               442       30.1
+## 2 Low                289       19.7
+## 3 Medium             280       19.0
+## 4 Very High          459       31.2</code></pre>
+<p><strong>Table 4</strong></p>
+<pre class="r"><code>hr_worklbal &lt;- hr_cleaned %&gt;%
+  count(work_life_balance)
+hr_worklbal$percentage &lt;- (hr_worklbal$n/sum(hr_worklbal$n))*100
+hr_worklbal</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   work_life_balance     n percentage
+##   &lt;chr&gt;             &lt;int&gt;      &lt;dbl&gt;
+## 1 Bad                  80       5.44
+## 2 Best                153      10.4 
+## 3 Better              893      60.7 
+## 4 Good                344      23.4</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Is there any relationship between monthly income and education? Monthly income and gender?</li>
+</ol>
+<p><strong>Table 5</strong></p>
+<pre class="r"><code>hr_income_education &lt;- hr_cleaned %&gt;%
+  group_by(education) %&gt;%
+  summarize(
+    avg_income = mean(monthly_income)
+  )
+
+hr_income_education</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   education     avg_income
+##   &lt;chr&gt;              &lt;dbl&gt;
+## 1 Bachelor           6517.
+## 2 Below College      5641.
+## 3 College            6227.
+## 4 Doctor             8278.
+## 5 Master             6832.</code></pre>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x=reorder(education,monthly_income), y=monthly_income))+
+  geom_boxplot()+
+  labs(
+    title=&quot;Boxplot of Monthly income according to education&quot;,
+    subtitle= &quot;Figure 6&quot;,
+    x=&quot;Education&quot;,
+    y=&quot;Income&quot;
+  )+
+  NULL</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/relationship%20monthly%20income%20and%20education-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><strong>Table 6</strong></p>
+<pre class="r"><code>hr_income_gender &lt;- hr_cleaned %&gt;%
+  group_by(gender) %&gt;%
+  summarize(
+    avg_income = mean(monthly_income)
+  )
+
+hr_income_gender</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   gender avg_income
+##   &lt;chr&gt;       &lt;dbl&gt;
+## 1 Female      6687.
+## 2 Male        6381.</code></pre>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x=gender,y= monthly_income))+
+  geom_boxplot()+
+  labs(
+    title=&quot;Boxplot of Monthly income according to gender&quot;,
+    subtitle= &quot;Figure 7&quot;,
+    x=&quot;Gender&quot;,
+    y=&quot;Income&quot;
+  )+
+  NULL</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/relationship%20between%20income%20and%20gender-1.png" width="648" style="display: block; margin: auto;" /></p>
+<ol start="5" style="list-style-type: decimal">
+<li>Plot a boxplot of income vs job role. Make sure the highest-paid job roles appear first</li>
+</ol>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x=reorder(job_role,-monthly_income), y=monthly_income))+
+         geom_boxplot()+
+  labs(
+    title=&quot;Job Role vs. Income&quot;,
+    subtitle= &quot;Figure 8&quot;,
+    x=&quot;Job Role&quot;,
+    y=&quot;Income&quot;
+  )+
+  theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=1))+
+  NULL</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/income%20vs.%20job%20role-1.png" width="648" style="display: block; margin: auto;" /></p>
+<ol start="6" style="list-style-type: decimal">
+<li>Calculate and plot a bar chart of the mean (or median?) income by education level.</li>
+</ol>
+<pre class="r"><code>hr_mean_income_education &lt;- hr_cleaned %&gt;%
+  group_by(education) %&gt;%
+  summarize(
+    mean_income=mean(monthly_income),
+    median_income=median(monthly_income)
+    )
+
+ggplot(hr_mean_income_education,aes(x=reorder(education, -mean_income), 
+                                    y=mean_income))+
+  geom_col()+
+  labs(
+    title=&quot;Average Income according to Education Level&quot;,
+    subtitle= &quot;Figure 9&quot;,
+    x=&quot;Education Level&quot;,
+    y=&quot;Average income&quot;
+    )+
+  NULL</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/income%20by%20education%20bar%20chart-1.png" width="648" style="display: block; margin: auto;" /></p>
+<ol start="7" style="list-style-type: decimal">
+<li>Plot the distribution of income by education level. Use a facet_wrap and a theme from <code>ggthemes</code></li>
+</ol>
+<pre class="r"><code>ggplot(hr_cleaned,aes(x=monthly_income))+
+  geom_histogram()+
+  facet_wrap(~education)+
+  theme_wsj()+
+  theme(plot.title = element_text(size=15),
+        plot.subtitle = element_text(size=12),
+        axis.text.x = element_text(angle=45, size = 10, vjust=0.5, hjust=1),
+        axis.text.y = element_text(angle=45, size = 10, vjust=0.5, hjust=1))+
+  labs(
+    title=&quot;Distribution of Income by Education Level&quot;,
+    subtitle= &quot;Figure 10&quot;,
+    x=&quot;Income&quot;,
+    y=&quot;Count&quot;
+  )+
+
+  NULL</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/distribution%20income%20by%20education%20level-1.png" width="648" style="display: block; margin: auto;" /></p>
+<ol start="8" style="list-style-type: decimal">
+<li>Plot income vs age, faceted by <code>job_role</code></li>
+</ol>
+<pre class="r"><code>ggplot(hr_cleaned, aes(x=age, y=monthly_income))+
+  geom_point(alpha=0.3)+
+  geom_smooth(method = &quot;lm&quot;)+
+  theme_bw()+
+  labs(
+    title=&quot;Correlation between Age and Income&quot;,
+    subtitle= &quot;Figure 11&quot;,
+    x=&quot;Age&quot;,
+    y=&quot;Income&quot;
+  )+
+  facet_wrap(~job_role)+
+  NULL</code></pre>
+<p><img src="/blogs/ibm_files/figure-html/income%20vs.%20age%20faceted%20by%20job%20role-1.png" width="648" style="display: block; margin: auto;" /></p>

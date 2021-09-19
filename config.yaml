@@ -92,14 +92,14 @@ params:
         subtitle: GDP components over time and among countries
         title: Project1-GDP components
         url: blogs/gdp
-      - image: pic04.jpg
-        subtitle: Nisl Sed Aliquam
-        title: Ipsum
-        url: blogs/ipsum
-      - image: pic05.jpg
-        subtitle: Ipsum Dolor Sit Amet
-        title: Consequat
-        url: blogs/ipsum
+      - image: bikes.jpg
+        subtitle: Excess rentals in TfL bike sharing
+        title: Project2-Bike rentals
+        url: blogs/bike
+      - image: conference.jpg
+        subtitle: IBM HR Analytics Employee Attrition & Performance
+        title: IBM HR Analytics
+        url: blogs/ibm
       - image: pic06.jpg
         subtitle: Feugiat Amet Tempus
         title: Etiam

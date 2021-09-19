@@ -1,0 +1,165 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:42:51-05:00"
+description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna
+  sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa
+  sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem
+  consequat tincidunt. Vivamus et sagittis tempus.
+draft: false
+image: bikesinner.jpg
+keywords: ""
+slug: bike
+title: Excess rentals in TfL bike sharing
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following</p>
+<pre class="r"><code>url &lt;- &quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&quot;
+
+# Download TFL data to temporary file
+httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
+<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2021-08-23T14%3A32%3A29/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20210919%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20210919T111557Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=7b3783f55b9ca009a5a95dfb007754dff00a5f29fca77151f199e706303b2f4c&amp;X-Amz-SignedHeaders=host]
+##   Date: 2021-09-19 11:17
+##   Status: 200
+##   Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+##   Size: 173 kB
+## &lt;ON DISK&gt;  C:\Users\lenovo\AppData\Local\Temp\RtmpcvbHKj\file3c744395783a.xlsx</code></pre>
+<pre class="r"><code># Use read_excel to read it as dataframe
+bike0 &lt;- read_excel(bike.temp,
+                   sheet = &quot;Data&quot;,
+                   range = cell_cols(&quot;A:B&quot;))
+
+# change dates to get year, month, and week
+bike &lt;- bike0 %&gt;% 
+  clean_names() %&gt;% 
+  rename (bikes_hired = number_of_bicycle_hires) %&gt;% 
+  mutate (year = year(day),
+          month = lubridate::month(day, label = TRUE),
+          week = isoweek(day))</code></pre>
+<p>The curves are flattening in May and June 2020 compared to previous years, implying less bikes are being rented per day. In early 2020 Covid-19 hit the world and the first wave of infections arrived around April and May 2020. People were put in an unprecedented situation with living through a pandemic. Many people were afraid to go out, in fear of catching the virus, the consequences of which have not yet been fully researched.<br />
+In a world where people are generally afraid of going out, it is likely that people also don’t want to rent public bikes which have been used by numerous individuals that could potentially carry the virus. Consequently, bike rentals in May and June went down with people trying to touch as little as possible things to reduce the likelihood of catching the virus.</p>
+<pre class="r"><code>#Compute expected average bike rentals in each month
+exp_bikes_per_month &lt;- bike %&gt;%
+  filter(year %in% 2016:2019) %&gt;%
+  group_by(month) %&gt;%
+  summarize(
+    monthly_average = mean(bikes_hired)
+  )
+#Compute actual average bike rentals per month
+actual_bikes_per_month &lt;- bike %&gt;%
+  filter(year&gt;=2016) %&gt;%
+  group_by(year, month) %&gt;%
+  summarize(
+    act_monthly_average = mean(bikes_hired)
+  )
+#Merge actual and expected bike rental in one dataframe
+bikes_per_month &lt;- 
+  left_join(actual_bikes_per_month, exp_bikes_per_month, by=&quot;month&quot;)
+
+#Compute discrepancies in actual and expected bike rentals
+bikes_per_month &lt;- bikes_per_month %&gt;%
+  mutate(
+    excess_rentals = act_monthly_average - monthly_average,
+    up = ifelse(act_monthly_average&gt;monthly_average, excess_rentals, 0),
+    down = ifelse(act_monthly_average&lt;monthly_average, excess_rentals, 0)
+  )
+
+ggplot(bikes_per_month, aes(x=month, group = year))+
+  geom_line(aes(y=act_monthly_average),size=0.4, color=&quot;#333333&quot;)+
+  geom_line(aes(y=monthly_average), size=1, color=&quot;blue&quot;) +
+  facet_wrap(~year)+
+  theme_minimal()+
+  geom_ribbon(aes(ymin=monthly_average,ymax=monthly_average+up), 
+              fill=&quot;#7DCD85&quot;,alpha=0.4)+
+  geom_ribbon(aes(ymin=monthly_average+down,ymax=monthly_average),
+              fill=&quot;#CB454A&quot;,alpha=0.4)+
+  labs(
+    title=&quot;Monthly changes in TfL bike rentals&quot;,
+    subtitle=&quot;Change from monthly average
+shown in blue and calculated between 2016-2019&quot;,
+    y=&quot;Bike rentals&quot;,
+    x=&quot;&quot;,
+    caption = &quot;Source: TfL, London Data Store&quot;
+  )+
+  theme(plot.title = element_text(size=14),
+        plot.subtitle=element_text(size = 12),
+        axis.title.y = element_text(face=&quot;bold&quot;, size=10),
+        axis.text.x = element_text(size=9),
+        axis.text.y = element_text(size=10),
+        plot.caption = element_text(size=8),
+        strip.text = element_text(size=8)
+        )</code></pre>
+<p><img src="/blogs/bike_files/figure-html/Monthly%20changes%20in%20TfL%20bike%20rentals-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Compute expected weekly average bike rentals in each month
+exp_bikes_per_week &lt;- bike %&gt;%
+  filter(year&gt;=2016 &amp; year &lt;=2019) %&gt;%
+  group_by(week) %&gt;%
+  summarize(
+    weekly_average = mean(bikes_hired)
+  )
+
+#Compute actual average bike rentals per week
+actual_bikes_per_week &lt;- bike %&gt;%
+  filter(year&gt;=2016) %&gt;%
+  group_by(week,year) %&gt;%
+  summarize(
+    act_weekly_average = mean(bikes_hired)
+  )
+#Merge actual and expected bike rental in one dataframe
+bikes_per_week &lt;- 
+  left_join(actual_bikes_per_week, exp_bikes_per_week, by=&quot;week&quot;)
+
+#Compute discrepancies in actual and expected bike rentals. In addition, 
+#take out week 53 for 2021.
+bikes_per_week &lt;- bikes_per_week %&gt;%
+  filter(!(week==53 &amp; year==2021)) %&gt;%
+  mutate(
+    excess_rentals = (act_weekly_average - weekly_average) / weekly_average,
+    up = if_else(excess_rentals&gt;0, excess_rentals,0),
+    down = if_else(excess_rentals &lt; 0, excess_rentals,0)
+  )
+#Plot graph
+ggplot(bikes_per_week,aes(x=week))+
+         geom_line(aes(y=excess_rentals), size=0.2)+
+  facet_wrap(~year)+
+  theme_minimal()+
+  geom_ribbon(aes(ymin=down,ymax=0),
+              fill=&quot;#CB454A&quot;,
+              alpha=0.4)+
+  geom_ribbon(aes(ymin=0, ymax=up), 
+              fill=&quot;#7DCD85&quot;, 
+              alpha=0.4)+
+  geom_rug(data=subset(bikes_per_week, excess_rentals &gt; 0), 
+           sides=&quot;b&quot;, 
+           color=&quot;#7DCD85&quot;)+
+  geom_rug(data=subset(bikes_per_week, excess_rentals &lt; 0), 
+           sides=&quot;b&quot;, 
+           color=&quot;#CB454A&quot;)+
+  annotate(geom = &quot;rect&quot;, xmin = 14, xmax = 26, ymin = -Inf, ymax = Inf, fill = &quot;grey&quot;, alpha=0.3)+
+  annotate(geom = &quot;rect&quot;, xmin = 40, xmax = 52, ymin = -Inf, ymax = Inf, fill = &quot;grey&quot;, alpha=0.3)+
+  scale_y_continuous(breaks=seq(-0.5,1,0.5),labels=function(x) paste0(x*100, &quot;%&quot;),limits=c(-0.6,1))+
+  scale_x_continuous(breaks=seq(0,53,13),labels=c(&quot;&quot;,&quot;13&quot;, &quot;26&quot;, &quot;39&quot;, &quot;53&quot;))+
+  labs(
+    title=&quot;Weekly changes in TfL bike rentals&quot;,
+    subtitle=&quot;% change from weekly averages
+calculated between 2016-2019&quot;,
+    y=&quot;&quot;,
+    x=&quot;week&quot;,
+    caption = &quot;Source: TfL, London Data Store&quot;
+)+
+  theme(plot.title = element_text(size=14, face=&quot;bold&quot;),
+        plot.subtitle=element_text(size = 12, face=&quot;bold&quot;),
+        axis.title.x = element_text(face=&quot;bold&quot;, size=12),
+        axis.text.x = element_text(size=8),
+        axis.text.y = element_text(size=8),
+        plot.caption = element_text(size=8),
+        strip.text = element_text(size=10)
+        )</code></pre>
+<p><img src="/blogs/bike_files/figure-html/Weekly%20changes%20in%20TfL%20bike%20rentals-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>Should you use the mean or the median to calculate your expected rentals? Why?<br><br />
+Generally speaking, expected values are computed by using the mean. The mean takes into account all values, even outliers, and therefore provides a good estimation of future values. The median also takes into account all values, but chooses the middle value, which might not accurately present future data.<br />
+Just in very skewed distributions, it might make sense to use the median to prevent outliers from skewing data, but I believe in this case the mean should be the most precise metrics. Furthermore, those two graphs were using the average, we used the same in order to properly replicate the graph.</p>
