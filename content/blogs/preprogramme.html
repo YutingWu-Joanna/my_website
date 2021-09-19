@@ -8,7 +8,7 @@ description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis mag
   sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem
   consequat tincidunt. Vivamus et sagittis tempus.
 draft: false
-image: company.jpg
+image: voteinner.jpg
 keywords: ""
 slug: preprogramme
 title: Pre-programme Assignment
@@ -17,8 +17,8 @@ title: Pre-programme Assignment
 <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
-<div id="task-2-gapminder-country-comparison" class="section level1">
-<h1>Task 2: <code>gapminder</code> country comparison</h1>
+<div id="task-1-gapminder-country-comparison" class="section level1">
+<h1>Task 1: <code>gapminder</code> country comparison</h1>
 <pre class="r"><code>glimpse(gapminder)</code></pre>
 <pre><code>## Rows: 1,704
 ## Columns: 6
@@ -96,8 +96,8 @@ plot1</code></pre>
 - Overall, Life expectancy is highest in Europe and lowest in Africa.</p>
 </blockquote>
 </div>
-<div id="task-3-brexit-vote-analysis" class="section level1">
-<h1>Task 3: Brexit vote analysis</h1>
+<div id="task-2-brexit-vote-analysis" class="section level1">
+<h1>Task 2: Brexit vote analysis</h1>
 <pre class="r"><code>brexit_results &lt;- read_csv(here::here(&quot;data&quot;,&quot;brexit_results.csv&quot;))
 
 
@@ -152,8 +152,8 @@ ggplot(brexit_results, aes(x = leave_share)) +
 - The higher the rate of birth in the UK, the smaller the range of the percent of supporting for Brexit</p>
 </blockquote>
 </div>
-<div id="task-4-animal-rescue-incidents-attended-by-the-london-fire-brigade" class="section level1">
-<h1>Task 4: Animal rescue incidents attended by the London Fire Brigade</h1>
+<div id="task-3-animal-rescue-incidents-attended-by-the-london-fire-brigade" class="section level1">
+<h1>Task 3: Animal rescue incidents attended by the London Fire Brigade</h1>
 <pre class="r"><code>url &lt;- &quot;https://data.london.gov.uk/download/animal-rescue-incidents-attended-by-lfb/8a7d91c2-9aec-4bde-937a-3998f4717cd8/Animal%20Rescue%20incidents%20attended%20by%20LFB%20from%20Jan%202009.csv&quot;
 
 animal_rescue &lt;- read_csv(url,

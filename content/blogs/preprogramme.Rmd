@@ -8,7 +8,7 @@ description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis mag
   sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem
   consequat tincidunt. Vivamus et sagittis tempus.
 draft: false
-image: company.jpg
+image: voteinner.jpg
 keywords: ""
 slug: preprogramme
 title: Pre-programme Assignment
@@ -22,7 +22,7 @@ library(here)
 library(janitor)
 ```
 
-# Task 2: `gapminder` country comparison
+# Task 1: `gapminder` country comparison
 
 ```{r}
 glimpse(gapminder)
@@ -80,7 +80,7 @@ ggplot(data = gapminder , mapping = aes(x = year , y = lifeExp , colour= contine
 - Life expectancy growth slows in Asia and Africa.
 - Overall, Life expectancy is highest in Europe and lowest in Africa.
 
-# Task 3: Brexit vote analysis
+# Task 2: Brexit vote analysis
 
 ```{r load_brexit_data, warning=FALSE, message=FALSE}
 brexit_results <- read_csv(here::here("data","brexit_results.csv"))
@@ -134,7 +134,7 @@ ggplot(brexit_results, aes(x = born_in_uk, y = leave_share)) +
 - The higher the rate of birth in the UK, the smaller the range of the percent of supporting for Brexit
 
 
-# Task 4: Animal rescue incidents attended by the London Fire Brigade
+# Task 3: Animal rescue incidents attended by the London Fire Brigade
 
 ```{r load_animal_rescue_data, warning=FALSE, message=FALSE}
 
