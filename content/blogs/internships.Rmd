@@ -11,7 +11,7 @@ draft: false
 image: cv.jpg
 keywords: ""
 slug: myresume
-title: myresume
+title: My Resume
 ---
 
 I witnessed the immense potential within the data analytics field as a Business Analytics student at SUFE and LBS.I learned fundamental business knowledge and gained specialized business analytics skills through courses such as *Operational Management*, *Data Mining*, and *Regression Analysis*. Later, I applied my knowledge and skills into real-world practice through in-class projects and internships at Unilever and eBay. These experiences affirmed my passion for future career path in business analytics.

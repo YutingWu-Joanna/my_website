@@ -87,11 +87,11 @@ params:
       - image: work.jpg
         subtitle: Details about my previous internships
         title: My resume
-        url: blogs/My resume
-      - image: pic03.jpg
-        subtitle: Lorem Etiam Nullam
-        title: Magna
-        url: blogs/magna
+        url: blogs/myresume
+      - image: director.jpg
+        subtitle: GDP components over time and among countries
+        title: Project1-GDP components
+        url: blogs/gdp
       - image: pic04.jpg
         subtitle: Nisl Sed Aliquam
         title: Ipsum
