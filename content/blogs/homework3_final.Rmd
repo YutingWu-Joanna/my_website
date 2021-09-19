@@ -95,12 +95,6 @@ tidy_GDP_data<-long_UN_Gdp_data %>%
 country_list <- c("United States","India", "Germany")
 ```
 
-First, this is the plot that we will reproduce:
-
-```{r gdp1, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "gdp1.png"), error = FALSE)
-```
-
 ## GDP Breakdown for Germany, India and United States
 
 ```{r GDP 1 Plot, fig.width = 10, fig.height = 6}
@@ -176,10 +170,7 @@ wide_format_gdp %>%
 ```
 The self-calculated GDP is generally higher compared to the GDP provided in the dataframe by a few percentage points. However, there are also a few years in which the calculated GDP is lower than the provided GDP. Consequently, we can see that there is some deviation between self-calculated GDPs and provided GDPs.  
     
-    
-```{r gdp2, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "gdp2.png"), error = FALSE)
-```
+![GDP](D:/r_excluded/my_website/images/gdp2.png)   
 
 In the chart above, we can see the percentage of GDP which is spent on each of the four main GDP components, across Germany, India and the US. It is evident that for all three countries the biggest component is that of 'Household expenditure' with about 60% of GDP comprising of it. For India, Household expenditure proportion has significantly decreased over time from about 70% to 55% today. This does not necessarily mean India's Household expenditure is decreasing in absolute value. In turn, there has been a large increase in 'Gross capital formation' from 20% to about 35%. As India is an emerging economy, this is telling us that India has increased investment in capital good unproportionally over the years. The more capital a country possesses the more potential it has to grow in the long term.   
   
