@@ -107,11 +107,6 @@ params:
   two:
     buttonText: Get Started
     enable: yes
-    subtitle: "Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero.
-      \r\n    Mauris aliquet magna magna sed nunc rhoncus pharetra. \r\n    Pellentesque
-      condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia
-      pellentesque lorem ipsum dolor. \r\n    Nullam et orci eu lorem consequat tincidunt.
-      Vivamus et sagittis libero.\r\n    Mauris aliquet magna magna sed nunc rhoncus
-      amet pharetra et feugiat tempus."
-    title: Massa libero
+    subtitle: Yuting Wu, a student pursuing a master degree in LBS. Rich professional experiences across FMCG, Internet, Consulting, Healthcare and Real-estate industry. Skilled in Python, SQL and Excel with a Bachelor’s degree in Business Analytics.
+    title: Feel free to contact me!
     url: blogs
